@@ -70,20 +70,35 @@ $(function initializeMap () {
 
   // TODO: 
   // 1. Populate the <select>s with <option>s
-  $('select').each(
-    (_index, select) => {
-      db.then(db =>
-        $(select).append(
-          db[select.dataset.type].map (
-            item => Object.assign(
-              $(`<option>${item.name}</option>`)[0]
-              , {
-                item: item,
-              })
+$('select').each(             // for each <select> tag
+  function(_index, select) {    
+    db.then(function(db){     
+      $(select)
+      .append(db[select.dataset.type]  // append(array of objects, e.g. array of hotel objects)
+        .map(function(item) {             // call map on that array of objects
+          return Object.assign(                  // returns target object (option tag with name of hotel, e.g.)
+            $(`<option>${item.name}</option>`)[0], {item: item}
           )
-        )
+        })
       )
     })
+  }
+)
+
+  // $('select').each(
+  //   (_index, select) => {
+  //     db.then(db =>
+  //       $(select).append(
+  //         db[select.dataset.type].map (
+  //           item => Object.assign(
+  //             $(`<option>${item.name}</option>`)[0]
+  //             , {
+  //               item: item,
+  //             })
+  //         )
+  //       )
+  //     )
+  //   })
 
   // 2. Wire up the add buttons
   // We could do this if we wanted to select by the add
