@@ -6,6 +6,7 @@ var Hotel = db.model('hotel');
 var Restaurant = db.model('restaurant');
 var Activity = db.model('activity');
 var Place = db.model('place');
+var Day = db.model('day');
 
 router.get('/', function(req, res, next) {
 	Promise.all([
@@ -74,6 +75,88 @@ router.get('/api/activities', (req, res, next) =>
 			res.send(data.activities);})
 		.catch(next)
 )
+
+// GET /api/days -- list of all the days
+router.get('/api/days', function (req, res, next) {
+	Day.findAll()
+		.then(function(days){console.log(days)});
+})
+
+// GET /api/days/:id -- get one specific days
+router.get('/api/days/:id', function(req, res, next) {
+	Day.findOne({where: {id: req.params.id}})
+		.then(function(day){console.log(day)})
+		.catch(next);
+})
+
+// DELETE /api/days/:id -- delete one specific day
+router.delete('/api/days/:id', function(req, res, next) {
+	Day.findAll()
+	.then(function(days){
+		return Day.destroy({
+			where: {
+				id: req.params.id
+			},
+			truncate: true
+		});
+	})
+	.then(function(numOfDeletedDays){
+		console.log('You have deleted ' + numOfDeletedDays + ' days');
+	})
+	.catch(next);
+})
+
+// POST /api/days/number -- create a new day
+router.post('/api/days/number', function(req, res, next) {
+	Day.create({
+		number: number
+	})
+	.then(function(newDay){
+		console.log(newDay);
+	})
+	.catch(next);
+})
+
+// POST /api/days/:id/:attraction_type -- add an attraction to a specific day
+router.post('/api/days/:id/:attraction_type', function(req, res, next) {
+	Day.findOne({where: {id: req.params.id}})
+	.then(function(day){
+		// tie day to specific attraction, which is given in the req.body?
+		// day.addActivity
+		// day.addRestaurant
+
+	})
+})
+
+// WIKISTACK EXAMPLE
+// router.post(‘/‘, function (req, res, next) {
+// 	User.findOrCreate({
+// 		where: { 
+// 			email: req.body.authorEmail,
+// 			name: req.body.authorName
+// 		}
+// 	})
+// 	.spread(function(user, wasCreatedBoolean) { 
+// 		Page.create({
+// 			title: req.body.title,
+// 			content: req.body.content,
+// 			status: req.body.status
+// 		})
+// 		.then(function (createdPage) {
+// 			return createdPage.setAuthor(user) // updates the database
+// 		})
+// 	})
+// 	.then(function (createdPage) {
+// 		res.redirect(createdPage.route);
+// 	})
+// 	.catch(next);
+
+// DELETE /api/days/:id/:attraction_type -- delete an attraction from a specific day
+
+
+
+
+// /
 // Use Fetch (built in browser API):
 //
 //   IDK, look it up on MDN?
