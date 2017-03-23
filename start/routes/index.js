@@ -1,12 +1,21 @@
 var Promise = require('bluebird');
 var router = require('express').Router();
 
-var db = require('../models');
-var Hotel = db.model('hotel');
-var Restaurant = db.model('restaurant');
-var Activity = db.model('activity');
-var Place = db.model('place');
-var Day = db.model('day');
+var db = require('../models');//automatically points to index.js 
+var Hotel = db.Hotel
+
+// module.exports = {
+// 	db: db,
+// 	Day: Day,
+// 	Hotel: Hotel,
+// 	Restaurant: Restaurant,
+// 	Activity: Activity,
+// 	Place: Place
+// }
+var Restaurant = db.Restaurant;
+var Activity = db.Activity;
+var Place = db.Place;
+var Day = db.Day; //this does not link us to the model :(
 
 router.get('/', function(req, res, next) {
 	Promise.all([
@@ -107,20 +116,33 @@ router.delete('/api/days/:id', function(req, res, next) {
 })
 
 // POST /api/days/number -- create a new day
-router.post('/api/days/number', function(req, res, next) {
+router.post('/api/days/:number', function(req, res, next) {
 	Day.create({
-		number: number
+		number: req.params.number
 	})
-	.then(function(newDay){
-		console.log(newDay);
-	})
-	.catch(next);
+	.then(data => {
+			res.send(data);})
+	// .then(function(newDay){
+	// 	console.log(newDay);
+	// })
+	// .catch(next);
 })
 
 // POST /api/days/:id/:attraction_type -- add an attraction to a specific day
+//api/days/2/restaurants
 router.post('/api/days/:id/:attraction_type', function(req, res, next) {
-	Day.findOne({where: {id: req.params.id}})
+	Day.findById(req.params.id)
+	//Day.findOne({where: {id: req.params.id}})
 	.then(function(day){
+		if (req.params.attraction_type==='restaurants'){
+			console.log('tada!')
+			day.addRestaurant(2)//lets return to this and make 2 the button information related to the button being pushed
+		 }
+		//else if (){
+
+		// }else{
+		// 	addingTo = day.setHotel
+		// }
 		// tie day to specific attraction, which is given in the req.body?
 		// day.addActivity
 		// day.addRestaurant

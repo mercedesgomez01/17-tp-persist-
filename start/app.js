@@ -3,7 +3,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var nunjucks = require('nunjucks');
-var db = require('./models');
+var db = require('./models').db; 
 var router = require('./routes');
 
 
