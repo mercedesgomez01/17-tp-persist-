@@ -184,5 +184,20 @@ $('select').each(             // for each <select> tag
     })
 
   // When we start, add a day
-  $('button.addDay').click()
+  $.ajax({
+    method: 'GET',
+    url: '/api/days'
+  })
+  .then(function (data) {
+    for (var i = 0; i < data.length; i++) {
+      $('button.addDay').click()
+    }
+  })
+    
+
+
+
+
+
+
 });

@@ -88,7 +88,10 @@ router.get('/api/activities', (req, res, next) =>
 // GET /api/days -- list of all the days
 router.get('/api/days', function (req, res, next) {
 	Day.findAll()
-		.then(function(days){console.log(days)});
+		.then(function(days){
+			res.json(days)
+		})
+		.catch(next)
 })
 
 // GET /api/days/:id -- get one specific days
@@ -106,7 +109,7 @@ router.delete('/api/days/:id', function(req, res, next) {
 			where: {
 				id: req.params.id
 			},
-			truncate: true
+			// truncate: true
 		});
 	})
 	.then(function(numOfDeletedDays){
